@@ -7,14 +7,14 @@ export default {
   data () {
       return {
           datasets: [],
-          background:['#41B883',
-                      '#E46651',
-                      '#00D8FF',
-                      '#DD1B16',
-                      '#41B883',
-                      '#007bff',
-                      '#087574',
-                      '#ff1B16']
+          background:['#7ECBD7',
+            '#48B2E4',
+            '#1C5281',
+            '#912740',
+            '#E04352',
+            '#F29229',
+            '#1b98d3',
+            '#204568']
       }
   },
   methods:{
