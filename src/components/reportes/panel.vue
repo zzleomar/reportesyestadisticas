@@ -1,159 +1,162 @@
 <template>
-	<div class="card">
-	    <div class="card-header">
-	      <h2 class="form-title">Reportes y Estadisticas</h2>
-	    </div>
-    	<div class="card-block">
-			<div id="panel">
-				<!-- Tipo de Consulta -->
-				<b-form-group label="Tipo de Consulta">
-			      <b-form-radio-group id="btnradios1"
-			                          buttons
-			                          v-model="form.consulta"
-			                          :options="tipos"
-			                          name="radiosBtnDefault" />
-			    </b-form-group>
-			    <!-- Parametros-->
-			    <div class="form-row">
-			    	<div class="col-3">
-						<b-form-group :label="'Parametros '+ tipo">
-					      <b-form-checkbox-group stacked v-model="form.parametros" name="flavour2" :options="parametros" :state="stateParametros">
-					      </b-form-checkbox-group>
-					    </b-form-group>
-			    	</div>
-			    	<!-- Lapso de Tiempo -->
-			    	<div class="col-3">
-					     <b-form-group label="Fecha">
-					      <b-form-radio-group v-model="form.periodo"
-					                          :options="optionsP"
-					                          stacked
-					                          name="radiosStacked">
-					      </b-form-radio-group>
-					    </b-form-group>
-			    	</div>
-				    <!-- Filtros -->
-				    <div class="col-6">
-				    	<div v-if="filtros!=null">
-				    		 <div>
-								  <label class="typo__label">Otros Filtros</label>
-								  <multiselect v-model="form.filtros" :options="filtros" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Seleccione filtro" :preselect-first="false" selectLabel="Seleccionar">
-								    <template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
-								  </multiselect>
-							</div>
+	<div class="container">
+		
+		<div class="card">
+		    <div class="card-header">
+		      <h2 class="form-title">Reportes y Estadisticas</h2>
+		    </div>
+	    	<div class="card-block">
+				<div id="panel">
+					<!-- Tipo de Consulta -->
+					<b-form-group label="Tipo de Consulta">
+				      <b-form-radio-group id="btnradios1"
+				                          buttons
+				                          v-model="form.consulta"
+				                          :options="tipos"
+				                          name="radiosBtnDefault" />
+				    </b-form-group>
+				    <!-- Parametros-->
+				    <div class="form-row">
+				    	<div class="col-3">
+							<b-form-group :label="'Parametros '+ tipo">
+						      <b-form-checkbox-group stacked v-model="form.parametros" name="flavour2" :options="parametros" :state="stateParametros">
+						      </b-form-checkbox-group>
+						    </b-form-group>
 				    	</div>
-				    	<div v-if="filtrosPjr!=null">
-				    		 <!-- <legend>Filtros Pasajeros</legend>
-						    <b-form-select multiple :select-size="4" v-model="form.filtrosP" :options="filtrosPjr" class="mb-3">
-					    	</b-form-select> -->
-					    	<div>
-								  <legend class="typo__label">Filtros Pasajeros</legend>
-								  <multiselect v-model="form.filtrosP" :options="filtrosPjr" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Seleccione filtro" :preselect-first="false" selectLabel="Seleccionar">
-								    <template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
-								  </multiselect>
-							</div>
-				    		 
-
+				    	<!-- Lapso de Tiempo -->
+				    	<div class="col-3">
+						     <b-form-group label="Fecha">
+						      <b-form-radio-group v-model="form.periodo"
+						                          :options="optionsP"
+						                          stacked
+						                          name="radiosStacked">
+						      </b-form-radio-group>
+						    </b-form-group>
 				    	</div>
-					    <div v-if="form.filtros!=null">
-					    	<!-- <div class="form-row"> -->
-					    	<div v-for="filtroA in form.filtros">
-						    	<b-form-group :label="filtroA">
-						    		<multiselect v-if="filtroA=='Cargo'" v-model="form.datosf[filtroA]" :options="opciones.Cargo" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Seleccione Cargos" :preselect-first="false" selectLabel="Seleccionar">
-								    <template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
-								  </multiselect>
-									<!-- <b-form-select multiple :select-size="4" v-if="filtroA=='Cargo'" v-model="form.datosf[filtroA]" :options="opciones.Cargo" class="mb-3" >
-									</b-form-select> -->
-									<multiselect v-if="filtroA=='Sucursal'" v-model="form.datosf[filtroA]" :options="opciones.Sucursal" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Seleccione Cargos" :preselect-first="false" selectLabel="Seleccionar">
-								    	<template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
-									</multiselect>
-									<!-- <b-form-select multiple :select-size="4" v-if="filtroA=='Sucursal'" v-model="form.datosf[filtroA]" :options="opciones.Sucursal" class="mb-3" >
-									</b-form-select> -->
-									<multiselect v-if="filtroA=='Origen'" v-model="form.datosf[filtroA]" :options="opciones.Origen" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Seleccione Cargos" :preselect-first="false" selectLabel="Seleccionar">
-								    	<template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
-									</multiselect>
-									<!-- <b-form-select multiple :select-size="4" v-if="filtroA=='Origen'" v-model="form.datosf[filtroA]" :options="opciones.Origen" class="mb-3" >
-									</b-form-select> -->
-									<multiselect v-if="filtroA=='Destino'" v-model="form.datosf[filtroA]" :options="opciones.Destino" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Seleccione Cargos" :preselect-first="false" selectLabel="Seleccionar">
-								    	<template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
-									</multiselect>
-									<!-- <b-form-select multiple :select-size="4" v-if="filtroA=='Destino'" v-model="form.datosf[filtroA]" :options="opciones.Destino" class="mb-3" >
-									</b-form-select> -->
-									<multiselect v-if="filtroA=='Ruta'" v-model="form.datosf[filtroA]" :options="opciones.Ruta" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Seleccione Cargos" :preselect-first="false" selectLabel="Seleccionar">
-								    	<template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
-									</multiselect>
-									<!-- <b-form-select multiple :select-size="4" v-if="filtroA=='Ruta'" v-model="form.datosf[filtroA]" :options="opciones.Ruta" class="mb-3" >
-									</b-form-select> -->
-								</b-form-group>
+					    <!-- Filtros -->
+					    <div class="col-6">
+					    	<div v-if="filtros!=null">
+					    		 <div>
+									  <legend class="typo__label">Otros Filtros</legend>
+									  <multiselect v-model="form.filtros" :options="filtros" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Seleccione filtro" :preselect-first="false" selectLabel="Seleccionar">
+									    <template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
+									  </multiselect>
+								</div>
 					    	</div>
-					    <!-- </div> -->
-					    </div>
+					    	<div v-if="filtrosPjr!=null">
+					    		 <!-- <legend>Filtros Pasajeros</legend>
+							    <b-form-select multiple :select-size="4" v-model="form.filtrosP" :options="filtrosPjr" class="mb-3">
+						    	</b-form-select> -->
+						    	<div>
+									  <legend class="typo__label">Filtros Pasajeros</legend>
+									  <multiselect v-model="form.filtrosP" :options="filtrosPjr" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Seleccione filtro" :preselect-first="false" selectLabel="Seleccionar">
+									    <template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
+									  </multiselect>
+								</div>
+					    		 
+
+					    	</div>
+						    <div v-if="form.filtros!=null">
+						    	<!-- <div class="form-row"> -->
+						    	<div v-for="filtroA in form.filtros">
+							    	<b-form-group :label="filtroA">
+							    		<multiselect v-if="filtroA=='Cargo'" v-model="form.datosf[filtroA]" :options="opciones.Cargo" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Seleccione Cargos" :preselect-first="false" selectLabel="Seleccionar">
+									    <template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
+									  </multiselect>
+										<!-- <b-form-select multiple :select-size="4" v-if="filtroA=='Cargo'" v-model="form.datosf[filtroA]" :options="opciones.Cargo" class="mb-3" >
+										</b-form-select> -->
+										<multiselect v-if="filtroA=='Sucursal'" v-model="form.datosf[filtroA]" :options="opciones.Sucursal" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Seleccione Cargos" :preselect-first="false" selectLabel="Seleccionar">
+									    	<template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
+										</multiselect>
+										<!-- <b-form-select multiple :select-size="4" v-if="filtroA=='Sucursal'" v-model="form.datosf[filtroA]" :options="opciones.Sucursal" class="mb-3" >
+										</b-form-select> -->
+										<multiselect v-if="filtroA=='Origen'" v-model="form.datosf[filtroA]" :options="opciones.Origen" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Seleccione Cargos" :preselect-first="false" selectLabel="Seleccionar">
+									    	<template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
+										</multiselect>
+										<!-- <b-form-select multiple :select-size="4" v-if="filtroA=='Origen'" v-model="form.datosf[filtroA]" :options="opciones.Origen" class="mb-3" >
+										</b-form-select> -->
+										<multiselect v-if="filtroA=='Destino'" v-model="form.datosf[filtroA]" :options="opciones.Destino" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Seleccione Cargos" :preselect-first="false" selectLabel="Seleccionar">
+									    	<template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
+										</multiselect>
+										<!-- <b-form-select multiple :select-size="4" v-if="filtroA=='Destino'" v-model="form.datosf[filtroA]" :options="opciones.Destino" class="mb-3" >
+										</b-form-select> -->
+										<multiselect v-if="filtroA=='Ruta'" v-model="form.datosf[filtroA]" :options="opciones.Ruta" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Seleccione Cargos" :preselect-first="false" selectLabel="Seleccionar">
+									    	<template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
+										</multiselect>
+										<!-- <b-form-select multiple :select-size="4" v-if="filtroA=='Ruta'" v-model="form.datosf[filtroA]" :options="opciones.Ruta" class="mb-3" >
+										</b-form-select> -->
+									</b-form-group>
+						    	</div>
+						    <!-- </div> -->
+						    </div>
+						</div>
+				    </div>
+				    <div class="form-row" v-if="form.periodo=='Temporada'">
+				    	<div class="col-4" >
+				    		 <legend>Temporada</legend>
+				    		 <multiselect v-model="form.temporadas" :options="opcionesT" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Seleccione Cargos" :preselect-first="false" selectLabel="Seleccionar">
+						    	<template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
+							</multiselect>
+						    <!-- <b-form-select multiple :select-size="4" v-model="form.temporadas" :options="opcionesT" class="mb-3">
+					    	</b-form-select> -->
+				    	</div>
+				    	<div class="col-2" >
+				    		 <legend>Año</legend>
+				    		 <multiselect v-model="form.year" :options="year" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Seleccione Cargos" :preselect-first="false" selectLabel="Seleccionar">
+						    	<template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
+							</multiselect>
+						    <!-- <b-form-select multiple :select-size="4" v-model="form.year" :options="year" class="mb-3"> -->
+					    	</b-form-select>
+				    	</div>
 					</div>
-			    </div>
-			    <div class="form-row" v-if="form.periodo=='Temporada'">
-			    	<div class="col-4" >
-			    		 <legend>Temporada</legend>
-			    		 <multiselect v-model="form.temporadas" :options="opcionesT" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Seleccione Cargos" :preselect-first="false" selectLabel="Seleccionar">
-					    	<template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
-						</multiselect>
-					    <!-- <b-form-select multiple :select-size="4" v-model="form.temporadas" :options="opcionesT" class="mb-3">
-				    	</b-form-select> -->
-			    	</div>
-			    	<div class="col-2" >
-			    		 <legend>Año</legend>
-			    		 <multiselect v-model="form.year" :options="year" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Seleccione Cargos" :preselect-first="false" selectLabel="Seleccionar">
-					    	<template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
-						</multiselect>
-					    <!-- <b-form-select multiple :select-size="4" v-model="form.year" :options="year" class="mb-3"> -->
-				    	</b-form-select>
-			    	</div>
-				</div>
-			    <div class="form-row" v-if="form.periodo=='Personalizado'">
-			    	<div class="col-md-4">
-			              <label for="fecha_ingreso">Desde</label>
-			              <div class="input-group">
-			              	<b-form-input v-model="form.desde" type="date">
-						      </b-form-input>
-			                <div class="input-group-append">
-			                  <span class="input-group-text">
-			                    <i class="fas fa-calendar"></i>
-			                  </span>
-			                </div>
-			              </div>
-			            </div>
-			            <div class="col-md-4">
-			              <label for="fecha_ingreso">Hasta</label>
-			              <div class="input-group">
-			                <b-form-input v-model="form.hasta" type="date">
-						      </b-form-input>
-			                <div class="input-group-append">
-			                  <span class="input-group-text">
-			                    <i class="fas fa-calendar"></i>
-			                  </span>
-			                </div>
-			              </div>
-			            </div>
-			    </div><br>
-			<div class="row">
-	          <div class="col-12">
-	            <div class="form-group">
-	              <button type="submit" class="btn btn-success" @click="generar()">
-	                <i class="fas fa-check"></i>Generar
-	              </button>
-	              <button type="reset" class="btn btn-danger">
-	                <i class="fas fa-eraser"></i> Limpiar
-	              </button>
-	            </div>
-	          </div>
-	        </div>
+				    <div class="form-row" v-if="form.periodo=='Personalizado'">
+				    	<div class="col-md-4">
+				              <label for="fecha_ingreso">Desde</label>
+				              <div class="input-group">
+				              	<b-form-input v-model="form.desde" type="date">
+							      </b-form-input>
+				                <div class="input-group-append">
+				                  <span class="input-group-text">
+				                    <i class="fas fa-calendar"></i>
+				                  </span>
+				                </div>
+				              </div>
+				            </div>
+				            <div class="col-md-4">
+				              <label for="fecha_ingreso">Hasta</label>
+				              <div class="input-group">
+				                <b-form-input v-model="form.hasta" type="date">
+							      </b-form-input>
+				                <div class="input-group-append">
+				                  <span class="input-group-text">
+				                    <i class="fas fa-calendar"></i>
+				                  </span>
+				                </div>
+				              </div>
+				            </div>
+				    </div><br>
+				<div class="row">
+		          <div class="col-12">
+		            <div class="form-group">
+		              <button type="submit" class="btn btn-success" @click="generar()">
+		                <i class="fas fa-check"></i>Generar
+		              </button>
+		              <button type="reset" class="btn btn-danger">
+		                <i class="fas fa-eraser"></i> Limpiar
+		              </button>
+		            </div>
+		          </div>
+		        </div>
+			</div>
 		</div>
+		<div class="card">
+	    	<div class="card-block">
+				<div v-show="graficas.length>=1">
+		        	<Resultados :graficas="graficas"></Resultados>
+		        </div>
+	    	</div>
+	    </div>
 	</div>
-	<div class="card">
-    	<div class="card-block">
-			<div v-show="graficas.length>=1">
-	        	<Resultados :graficas="graficas"></Resultados>
-	        </div>
-    	</div>
-    </div>
 </div>
 </template>
 <script src="../fontawesome-all.min.js"></script>
@@ -499,7 +502,7 @@ import Multiselect from 'vue-multiselect'
 	.multiselect__tag{
 		font-size: 1.2rem;
 	}
-	label, legend {
+	legend {
 		font-weight: 700;
 	}
 	span.custom__remove{
