@@ -51,6 +51,7 @@
 				    </div>
 				</div>
 			</div>
+			<button class="btn btn-primary">Diagnosticar</button>
 	</div>
 </template>
 <script type="text/javascript">

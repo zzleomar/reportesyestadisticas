@@ -2,7 +2,9 @@
 	<div>
     <header class="app-header fixed-top">
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">AVCA</a>
+        <a class="navbar-brand" href="#">
+            <div id="logo"></div>
+        </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#adminHeader"
           aria-controls="adminHeader" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -78,3 +80,19 @@ export default {
   }
 };
 </script>
+
+<style type="text/css">
+  #logo{
+    height: 40px;
+    width: 100px;
+    position: absolute;
+    margin-top: 0px !important;
+    background: url("../../assets/logo.png");
+        background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
+        -o-background-size: cover;
+    background-size: 100% 100%;
+    top: 0;
+  }
+</style>

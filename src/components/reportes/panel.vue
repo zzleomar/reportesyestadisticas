@@ -3,12 +3,12 @@
 		
 		<div class="card">
 		    <div class="card-header">
-		      <h2 class="form-title">Reportes y Estadisticas</h2>
+		      <h2 class="form-title">Reportes y Estadísticas</h2>
 		    </div>
 	    	<div class="card-block">
 				<div id="panel">
 					<!-- Tipo de Consulta -->
-					<b-form-group label="Tipo de Consulta">
+					<b-form-group label="Consultas">
 				      <b-form-radio-group id="btnradios1"
 				                          buttons
 				                          v-model="form.consulta"
@@ -35,6 +35,27 @@
 				    	</div>
 					    <!-- Filtros -->
 					    <div class="col-6">
+					    	<b-form-group>
+						      <b-form-radio-group id="btnradios1"
+						                          buttons
+						                          v-model="form.tipo"
+						                          :options="tiposC"
+						                          name="radiosBtnDefault" />
+						    </b-form-group>
+						    <div v-if="form.tipo=='Busqueda'" id="Busqueda" class="row marginCero">
+								<legend class="typo__label">Condición: [{{ textC }}]</legend>
+								  <multiselect v-model="form.busqueda" :options="busqueda" :multiple="false" :close-on-select="true" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Seleccione filtro" :preselect-first="false" selectLabel="Seleccionar" class="col-5 sinpadding">
+								    <template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
+								  </multiselect>
+								  <div v-if="form.busqueda=='Mayor que'||form.busqueda=='Menor que'" class="col-4 sinpadding">
+									  <multiselect v-model="form.busquedaMonto" :options="busquedaMonto" :multiple="false" :close-on-select="true" :clear-on-select="false" :hide-selected="true" :preserve-search="true" :preselect-first="false" selectLabel="Seleccionar" placeholder="Parametro">
+									    <template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
+									  </multiselect>
+								  </div>
+								  <multiselect v-model="form.busquedaRow" :options="busquedaRow" :multiple="false" :close-on-select="true" :clear-on-select="false" :hide-selected="true" :preserve-search="true" :preselect-first="false" selectLabel="Seleccionar" class="col sinpadding" placeholder="Resultados">
+								    <template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
+								  </multiselect>
+							</div>
 					    	<div v-if="filtros!=null">
 					    		 <div>
 									  <legend class="typo__label">Otros Filtros</legend>
@@ -56,35 +77,25 @@
 					    		 
 
 					    	</div>
-						    <div v-if="form.filtros!=null">
+						    <div v-if="form.filtros!=null&&form.tipo!='Busqueda'">
 						    	<!-- <div class="form-row"> -->
 						    	<div v-for="filtroA in form.filtros">
 							    	<b-form-group :label="filtroA">
 							    		<multiselect v-if="filtroA=='Cargo'" v-model="form.datosf[filtroA]" :options="opciones.Cargo" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Seleccione Cargos" :preselect-first="false" selectLabel="Seleccionar">
 									    <template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
 									  </multiselect>
-										<!-- <b-form-select multiple :select-size="4" v-if="filtroA=='Cargo'" v-model="form.datosf[filtroA]" :options="opciones.Cargo" class="mb-3" >
-										</b-form-select> -->
 										<multiselect v-if="filtroA=='Sucursal'" v-model="form.datosf[filtroA]" :options="opciones.Sucursal" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Seleccione Cargos" :preselect-first="false" selectLabel="Seleccionar">
 									    	<template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
 										</multiselect>
-										<!-- <b-form-select multiple :select-size="4" v-if="filtroA=='Sucursal'" v-model="form.datosf[filtroA]" :options="opciones.Sucursal" class="mb-3" >
-										</b-form-select> -->
 										<multiselect v-if="filtroA=='Origen'" v-model="form.datosf[filtroA]" :options="opciones.Origen" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Seleccione Cargos" :preselect-first="false" selectLabel="Seleccionar">
 									    	<template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
 										</multiselect>
-										<!-- <b-form-select multiple :select-size="4" v-if="filtroA=='Origen'" v-model="form.datosf[filtroA]" :options="opciones.Origen" class="mb-3" >
-										</b-form-select> -->
 										<multiselect v-if="filtroA=='Destino'" v-model="form.datosf[filtroA]" :options="opciones.Destino" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Seleccione Cargos" :preselect-first="false" selectLabel="Seleccionar">
 									    	<template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
 										</multiselect>
-										<!-- <b-form-select multiple :select-size="4" v-if="filtroA=='Destino'" v-model="form.datosf[filtroA]" :options="opciones.Destino" class="mb-3" >
-										</b-form-select> -->
 										<multiselect v-if="filtroA=='Ruta'" v-model="form.datosf[filtroA]" :options="opciones.Ruta" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Seleccione Cargos" :preselect-first="false" selectLabel="Seleccionar">
 									    	<template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
 										</multiselect>
-										<!-- <b-form-select multiple :select-size="4" v-if="filtroA=='Ruta'" v-model="form.datosf[filtroA]" :options="opciones.Ruta" class="mb-3" >
-										</b-form-select> -->
 									</b-form-group>
 						    	</div>
 						    <!-- </div> -->
@@ -92,7 +103,7 @@
 						</div>
 				    </div>
 				    <div class="form-row" v-if="form.periodo=='Temporada'">
-				    	<div class="col-4" >
+				    	<div class="col-3" >
 				    		 <legend>Temporada</legend>
 				    		 <multiselect v-model="form.temporadas" :options="opcionesT" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Seleccione Cargos" :preselect-first="false" selectLabel="Seleccionar">
 						    	<template slot="tag" slot-scope="props"><span class="custom__tag multiselect__tag"><span>{{ props.option }}</span><span class="custom__remove" @click="props.remove(props.option)"><i class="fas fa-times-circle"></i></span></span></template>
@@ -110,7 +121,7 @@
 				    	</div>
 					</div>
 				    <div class="form-row" v-if="form.periodo=='Personalizado'">
-				    	<div class="col-md-4">
+				    	<div class="col-md-3">
 				              <label for="fecha_ingreso">Desde</label>
 				              <div class="input-group">
 				              	<b-form-input v-model="form.desde" type="date">
@@ -122,7 +133,7 @@
 				                </div>
 				              </div>
 				            </div>
-				            <div class="col-md-4">
+				            <div class="col-md-3">
 				              <label for="fecha_ingreso">Hasta</label>
 				              <div class="input-group">
 				                <b-form-input v-model="form.hasta" type="date">
@@ -141,9 +152,9 @@
 		              <button type="submit" class="btn btn-success" @click="generar()">
 		                <i class="fas fa-check"></i>Generar
 		              </button>
-		              <button type="reset" class="btn btn-danger">
+		             <!--  <button type="reset" class="btn btn-danger">
 		                <i class="fas fa-eraser"></i> Limpiar
-		              </button>
+		              </button> -->
 		            </div>
 		          </div>
 		        </div>
@@ -174,6 +185,7 @@ import Multiselect from 'vue-multiselect'
 				dataPoints: null,
         		height: 20,
 				datos:[23,21,12,43],
+				textC:null,
 				form:{
 					consulta:"Personal",
 					parametros:[],
@@ -184,8 +196,13 @@ import Multiselect from 'vue-multiselect'
 					desde:null,
 					hasta:null,
 					temporadas:[],
-					year:["2017"]
+					year:["2017"],
+					tipo:"Consulta",
+					busqueda:"Más alto",
+					busquedaRow:"1",
+					busquedaMonto:"2000"
 				},
+				tiposC:["Consulta","Busqueda"],
 				filtrosPjr:null,
 				P:[
 					'Bebe','Niños','Adolecente','Adulto','Discapacitado'
@@ -213,7 +230,10 @@ import Multiselect from 'vue-multiselect'
 				],
 				filtros:[
 					"Cargo","Sucursal"
-				]
+				],
+				busqueda:["Más alto","Más bajo","Mayor que","Menor que"],
+    			busquedaRow:["1","2","3","4","5"],
+				busquedaMonto:["1000","1500","2000","2500","3000"]
     // ][
 				// 	{text: 'Cargo', value: 'Cargo'},
 				// 	{text: 'Sucursal', value: 'Sucursal'}
@@ -275,13 +295,49 @@ import Multiselect from 'vue-multiselect'
 				this.form.desde=null;
 				this.form.hasta=null;
 				this.form.filtrosP=[];
+				this.form.tipo="Consulta";
+				this.form.busqueda="Más alto";
+				this.form.busquedaRow="1";
+				this.form.busquedaMonto="2000";
 				this.cambiaOpciones();
 			},
 			'form.filtros': function(){
-	      		this.form.datosf=[]
+	      		this.StringConsulta()
+			},
+			'form.busqueda': function(){
+	      		this.StringConsulta()
+			},
+			'form.busquedaRow': function(){
+	      		this.StringConsulta()
+			},
+			'form.busquedaMonto': function(){
+	      		this.StringConsulta()
 			}
 		},
 		methods:{
+			StringConsulta(){
+				this.textC=null;
+				if(this.form.busqueda=='Más alto'||this.form.busqueda=='Más bajo'){
+					if(this.form.busquedaRow=='1'){
+						this.textC="El "+this.form.busqueda;
+					}
+					else{
+						this.textC="Los "+this.form.busquedaRow+" "+this.form.busqueda;
+					}
+				}
+				else{
+					if(this.form.busquedaRow=='1'){
+						this.textC="El "+this.form.busqueda+" "+this.form.busquedaMonto;
+					}
+					else{
+						if(this.form.busqueda=='Mayor que')
+							this.textC="Los "+this.form.busquedaRow+" Mayores que "+this.form.busquedaMonto;
+						else
+							this.textC="Los "+this.form.busquedaRow+" Menores que "+this.form.busquedaMonto;
+					}
+				}
+
+			},
 			aleatorio(){
 				return Math.floor(Math.random() * (95 - 5 + 1)) + 5;
 			},
@@ -507,5 +563,34 @@ import Multiselect from 'vue-multiselect'
 	}
 	span.custom__remove{
 		margin-left: 10px;
+	}
+	#Busqueda .multiselect__single{
+		font-size: 1.2rem;
+		position: relative;
+	    display: inline-block;
+	    padding: 4px 26px 4px 10px;
+	    border-radius: 5px;
+	    margin-right: 10px;
+	    color: #fff;
+	    line-height: 1;
+	    background: #41b883;
+	    margin-bottom: 5px;
+	    white-space: nowrap;
+	    overflow: hidden;
+	    max-width: 100%;
+	    text-overflow: ellipsis;
+	}
+	.sinpadding{
+		padding-left: 0px;
+    	padding-right: 0px;
+	}
+	.paddingLnode{    
+		padding-right: 0px;
+	    font-weight: 700;
+	    line-height: 3;
+	}
+	.marginCero{
+		margin-right: 0px;
+		margin-left: 0px;
 	}
 </style>
