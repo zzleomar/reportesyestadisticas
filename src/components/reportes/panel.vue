@@ -581,16 +581,16 @@ import Multiselect from 'vue-multiselect'
 	    text-overflow: ellipsis;
 	}
 	.sinpadding{
-		padding-left: 0px;
-    	padding-right: 0px;
+		padding-left: 0px !important;
+    	padding-right: 0px !important;
 	}
 	.paddingLnode{    
-		padding-right: 0px;
+		padding-right: 0px !important;
 	    font-weight: 700;
 	    line-height: 3;
 	}
 	.marginCero{
-		margin-right: 0px;
-		margin-left: 0px;
+		margin-right: 0px !important;
+		margin-left: 0px !important;
 	}
 </style>
