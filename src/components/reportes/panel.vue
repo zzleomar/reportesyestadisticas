@@ -178,7 +178,7 @@ import Multiselect from 'vue-multiselect'
 	export default {
 		components: {
 		  Resultados,
-		  Multiselect 
+		  Multiselect,
 	    },
 		data () {
 			return {
